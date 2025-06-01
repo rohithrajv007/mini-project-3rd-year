@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutex - Audio Content Moderator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo-container">
+                <div class="logo">
+                    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 3C9.72 3 3 9.72 3 18C3 26.28 9.72 33 18 33C26.28 33 33 26.28 33 18C33 9.72 26.28 3 18 3ZM18 6C19.98 6 21.86 6.47 23.53 7.33L8.33 22.53C7.47 20.86 7 18.98 7 17C7 12 12 7 18 7V6ZM18 30C16.02 30 14.14 29.53 12.47 28.67L27.67 13.47C28.53 15.14 29 17.02 29 19C29 24 24 29 18 29V30Z" fill="#5C6BC0"/>
+                    </svg>
+                </div>
+                <h1>MUTEX</h1>
+            </div>
+            <p class="tagline">Smart Audio Content Moderation</p>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <div class="upload-card">
+                    <h2>Audio Content Moderator</h2>
+                    <p>Upload your audio file to automatically detect and censor inappropriate content.</p>
+                    
+                    <form id="uploadForm" action="/convert" method="POST" enctype="multipart/form-data">
+                        <div class="file-upload-container">
+                            <div class="file-upload-area" id="dropArea">
+                                <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#5C6BC0" stroke-width="2"/>
+                                    <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="#5C6BC0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <p class="drag-text">Drag and drop audio file here</p>
+                                <p class="or-text">- OR -</p>
+                                <label for="audioFile" class="browse-btn">Browse Files</label>
+                                <input type="file" id="audioFile" name="audio" accept="audio/*" hidden>
+                                <p class="file-info" id="fileInfo">No file selected</p>
+                            </div>
+                        </div>
+
+                        <div class="options-container">
+                            <h3>Censoring Options</h3>
+                            <div class="option-group">
+                                <label class="option-label">Censor Type:</label>
+                                <div class="radio-buttons">
+                                    <label class="radio-label">
+                                        <input type="radio" name="censor_type" value="beep" checked>
+                                        <span class="radio-custom"></span>
+                                        Beep
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="censor_type" value="silence">
+                                        <span class="radio-custom"></span>
+                                        Silence
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="option-group">
+                                <label for="padding" class="option-label">Word Padding (ms):</label>
+                                <div class="slider-container">
+                                    <input type="range" id="padding" name="padding" min="50" max="500" value="200">
+                                    <span id="paddingValue">200 ms</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="submit-btn" disabled>Process Audio</button>
+                    </form>
+                </div>
+
+                <div class="features-card">
+                    <h3>Features</h3>
+                    <ul class="features-list">
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#4CAF50" stroke-width="2"/>
+                                <path d="M8 12L11 15L16 9" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Automatic detection of offensive words</span>
+                        </li>
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#4CAF50" stroke-width="2"/>
+                                <path d="M8 12L11 15L16 9" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Multiple censoring options (beep or silence)</span>
+                        </li>
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#4CAF50" stroke-width="2"/>
+                                <path d="M8 12L11 15L16 9" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Adjustable padding for better context</span>
+                        </li>
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#4CAF50" stroke-width="2"/>
+                                <path d="M8 12L11 15L16 9" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Advanced AI-powered speech recognition</span>
+                        </li>
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#4CAF50" stroke-width="2"/>
+                                <path d="M8 12L11 15L16 9" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Fast processing with optimized algorithms</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="wave-animation">
+                <svg class="wave-svg" viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path class="wave" d="M0,50 C240,110 480,-10 720,50 C960,110 1200,-10 1440,50 L1440,100 L0,100 Z" fill="#5C6BC0" fill-opacity="0.1"/>
+                </svg>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Mutex - Audio Content Moderator</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

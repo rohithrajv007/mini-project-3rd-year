@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutex - Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo-container">
+                <div class="logo">
+                    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 3C9.72 3 3 9.72 3 18C3 26.28 9.72 33 18 33C26.28 33 33 26.28 33 18C33 9.72 26.28 3 18 3ZM18 6C19.98 6 21.86 6.47 23.53 7.33L8.33 22.53C7.47 20.86 7 18.98 7 17C7 12 12 7 18 7V6ZM18 30C16.02 30 14.14 29.53 12.47 28.67L27.67 13.47C28.53 15.14 29 17.02 29 19C29 24 24 29 18 29V30Z" fill="#5C6BC0"/>
+                    </svg>
+                </div>
+                <h1>MUTEX</h1>
+            </div>
+            <p class="tagline">Smart Audio Content Moderation</p>
+        </header>
+        <main>
+            <section class="results-container">
+                <h2>Audio Processing Results</h2>
+                
+                <div class="result-section">
+                    <h3>Processed Audio</h3>
+                    <audio controls class="audio-player" src="{{ url_for('uploaded_file', filename=output_filename) }}">
+                        Your browser does not support the audio element.
+                    </audio>
+                    
+                    <div class="download-container">
+                        <a href="{{ url_for('uploaded_file', filename=output_filename) }}" download class="download-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" fill="currentColor"/>
+                            </svg>
+                            Download Processed Audio
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="result-section">
+                    <h3>Transcription</h3>
+                    <div class="transcription-container">
+                        <p class="transcription">
+                            {% for word in display_words %}
+                                <span class="{% if word == '____' %}censored-word{% endif %}">{{ word }}</span>
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="result-section">
+                    <h3>Processing Report</h3>
+                    <div class="report-container">
+                        <div class="report-item">
+                            <div class="report-label">Speech Recognition Confidence:</div>
+                            <div class="report-value">{{ confidence }}%</div>
+                        </div>
+                        
+                        <div class="report-item">
+                            <div class="report-label">Inappropriate Content Found:</div>
+                            <div class="report-value">
+                                {% if bad_words_found %}
+                                    <span class="warning">Yes</span>
+                                {% else %}
+                                    <span class="success">No</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        {% if bad_words_found %}
+                        <div class="report-item">
+                            <div class="report-label">Censored Words Count:</div>
+                            <div class="report-value">{{ bad_words_found|length }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <a href="{{ url_for('upload_form') }}" class="btn secondary-btn">Process Another File</a>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 Mutex - Audio Content Moderation</p>
+        </footer>
+    </div>
+</body>
+</html>
